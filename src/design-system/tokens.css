@@ -1,0 +1,166 @@
+/**
+ * Design tokens — the single source of truth for all visual primitives.
+ *
+ * Rebrand by editing values in this file. Everything in the app (Tailwind
+ * utilities, component styles) resolves to one of these CSS variables.
+ *
+ * Values extracted from Figma: Main St Orthodontics homepage.
+ */
+
+:root {
+  /* ─── Color ─────────────────────────────────────────────────────────── */
+  /* Values are space-separated RGB triplets so Tailwind utilities can apply
+     opacity, e.g. `bg-primary/10`. Wrap with rgb() at the use site.        */
+
+  /* Surface */
+  --color-bg: 255 255 255;
+  --color-bg-muted: 238 242 241; /* #EEF2F1 — stats bar, subtle sections */
+  --color-bg-accent: 226 254 255; /* #E2FEFF — nav, contact section */
+  --color-bg-warm: 247 192 179; /* #F7C0B3 — testimonials section */
+  --color-surface: 255 255 255;
+  --color-surface-raised: 255 255 255;
+
+  /* Foreground — Figma palette:
+     fg       #27585D (39 88 93)  — headings, strong text
+     fg-muted #6E5513 (110 85 19) — body copy
+     fg-subtle #9F9886 (159 152 134) — placeholders, de-emphasized */
+  --color-fg: 39 88 93;
+  --color-fg-muted: 110 85 19;
+  --color-fg-subtle: 159 152 134;
+  --color-fg-inverse: 255 255 255;
+
+  /* Border — Figma card outlines:
+     border       #99DADD (153 218 221)
+     border-strong #009091 (0 144 145) — form card border */
+  --color-border: 153 218 221;
+  --color-border-strong: 0 144 145;
+
+  /* Brand — Figma palette:
+     primary (CTA blue) #3DA4CE — filled buttons, link accents
+     accent  (teal)     #009091 — labels, highlights, sub-accents */
+  --color-primary: 61 164 206;
+  --color-primary-hover: 49 141 179;
+  --color-primary-fg: 255 255 255;
+
+  --color-accent: 0 144 145;
+  --color-accent-hover: 0 120 121;
+  --color-accent-fg: 255 255 255;
+
+  /* Feedback */
+  --color-success: 22 163 74;
+  --color-warning: 245 158 11;
+  --color-danger: 220 38 38;
+  --color-info: 37 99 235;
+
+  /* ─── Typography ────────────────────────────────────────────────────── */
+  /* Font families (the -raw variables are populated by next/font in layout.tsx) */
+  --font-sans: var(--font-sans-raw), ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-display: var(--font-sans-raw), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono-raw), ui-monospace, SFMono-Regular, Menlo,
+    Monaco, Consolas, monospace;
+
+  /* Font sizes (rem-based; 1rem = 16px) — all match Figma exactly */
+  --text-xs: 0.75rem; /* 12 */
+  --text-sm: 0.875rem; /* 14 */
+  --text-base: 1rem; /* 16 */
+  --text-lg: 1.125rem; /* 18 */
+  --text-xl: 1.25rem; /* 20 — Figma body/labels */
+  --text-2xl: 1.5rem; /* 24 — Figma sub-headings */
+  --text-3xl: 1.875rem; /* 30 */
+  --text-4xl: 2.25rem; /* 36 */
+  --text-5xl: 3rem; /* 48 — Figma section headings */
+  --text-6xl: 3.75rem; /* 60 */
+  --text-7xl: 4.5rem; /* 72 */
+
+  /* Line heights */
+  --leading-none: 1;
+  --leading-tight: 1.15;
+  --leading-snug: 1.3;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.65;
+  --leading-loose: 1.85;
+
+  /* Font weights */
+  --font-regular: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+
+  /* Letter spacing */
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.04em;
+
+  /* ─── Spacing scale (used for padding, margin, gap, width, height) ────── */
+  --space-0: 0;
+  --space-px: 1px;
+  --space-0_5: 2px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-14: 56px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-28: 112px;
+  --space-32: 128px;
+  --space-40: 160px;
+  --space-48: 192px;
+  --space-56: 224px;
+  --space-64: 256px;
+
+  /* Semantic layout sizes */
+  --container-max: 1200px;
+  --container-narrow: 760px;
+  --gutter: 24px;
+  --gutter-mobile: 16px;
+  --section-y-sm: 48px;
+  --section-y-md: 96px;
+  --section-y-lg: 128px;
+  --section-y-sm-mobile: 32px;
+  --section-y-md-mobile: 48px;
+  --section-y-lg-mobile: 64px;
+
+  /* ─── Radii — values mapped from Figma ────────────────────────────── */
+  --radius-none: 0;
+  --radius-sm: 4px;
+  --radius-md: 8px; /* Figma form inputs */
+  --radius-lg: 10px; /* Figma buttons */
+  --radius-xl: 20px; /* Figma cards, images */
+  --radius-2xl: 24px;
+  --radius-3xl: 32px;
+  --radius-full: 9999px;
+
+  /* ─── Shadows ───────────────────────────────────────────────────────── */
+  --shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.04);
+  --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 4px 8px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+  --shadow-lg: 0 10px 24px -3px rgba(15, 23, 42, 0.1), 0 4px 8px -4px rgba(15, 23, 42, 0.06);
+  --shadow-xl: 0 24px 48px -12px rgba(15, 23, 42, 0.18);
+  --shadow-focus: 0 0 0 3px rgb(var(--color-primary) / 0.25);
+
+  /* ─── Z-index layers ────────────────────────────────────────────────── */
+  --z-base: 0;
+  --z-raised: 10;
+  --z-sticky: 30;
+  --z-nav: 50;
+  --z-dropdown: 100;
+  --z-overlay: 200;
+  --z-modal: 300;
+  --z-toast: 400;
+  --z-tooltip: 500;
+
+  /* ─── Motion ────────────────────────────────────────────────────────── */
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-emphasized: cubic-bezier(0.3, 0, 0, 1);
+}
