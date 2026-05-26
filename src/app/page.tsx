@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
+import Link from 'next/link';
 import {
+  BlogCard,
   Button,
   Container,
   Grid,
@@ -10,9 +12,9 @@ import {
   Select,
   Text,
 } from '@/design-system';
-import { JsonLd } from '@/components/JsonLd';
 import { buildMetadata } from '@/lib/seo';
-import { SITE_URL, site } from '@/site.config';
+import { site, treatments, doctors } from '@/site.config';
+import { getAllPosts } from '@/lib/blog';
 
 /* ─── SEO ──────────────────────────────────────────────────────────── */
 
@@ -24,21 +26,6 @@ export const metadata: Metadata = buildMetadata({
   path: '/',
   absoluteTitle: true,
 });
-
-const dentistSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'Dentist',
-  name: site.brand,
-  url: SITE_URL,
-  description: site.description,
-};
-
-const websiteSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'WebSite',
-  name: site.brand,
-  url: SITE_URL,
-};
 
 /* ─── Data ─────────────────────────────────────────────────────────── */
 
@@ -65,30 +52,61 @@ const stats = [
   },
 ];
 
-const treatments = [
+const featureCards = [
   {
-    image: '/images/treatment-braces.png',
-    title: 'Traditional braces',
+    title: 'Free first consultation',
     description:
-      'Proven, effective and more comfortable than ever. Metal or ceramic options available.',
+      'Exam, digital scan, and a custom treatment plan — all at no cost and no pressure.',
+    href: '/new-patients/free-consult',
+    cta: 'Book a consult',
   },
   {
-    image: '/images/treatment-invisalign.png',
-    title: 'Invisalign',
+    title: 'Modern technology',
     description:
-      "Clear, removable aligners that straighten your teeth without anyone knowing you're wearing them.",
+      '3D digital scans, treatment previews, and the latest bracket and aligner systems.',
+    href: '/about/why-choose-us',
+    cta: 'Learn more',
   },
   {
-    image: '/images/treatment-retainers.png',
-    title: 'Retainers',
+    title: 'Smiles for all ages',
     description:
-      'Custom-fit retainers to protect your results and keep your smile looking its best for years to come.',
+      'From a child’s first visit at age 7 to adult treatment — we have an option for you.',
+    href: '/treatments',
+    cta: 'See treatments',
   },
   {
-    image: '/images/treatment-teen.png',
-    title: 'Teen orthodontics',
+    title: 'Flexible financing',
     description:
-      'Flexible treatment plans designed around busy teen schedules, sports and social lives.',
+      'Interest-free payment plans, HSA/FSA accepted, and most major insurance.',
+    href: '/new-patients/financing',
+    cta: 'View financing',
+  },
+];
+
+const journeySteps = [
+  {
+    number: '01',
+    title: 'Free consultation',
+    description:
+      'Meet our team, get a free exam, and walk through every option that fits your goals.',
+    href: '/new-patients/free-consult',
+    cta: 'Book now',
+  },
+  {
+    number: '02',
+    title: 'Digital scan & plan',
+    description:
+      'A quick 3D scan replaces messy impressions. See your future smile before treatment begins.',
+    href: '/new-patients/first-visit',
+    cta: 'What to expect',
+  },
+  {
+    number: '03',
+    title: 'Begin treatment',
+    description:
+      'Braces, Invisalign, or another option — we’ll guide you every step of the way to a confident smile.',
+    href: '/treatments',
+    cta: 'Explore options',
   },
 ];
 
@@ -103,22 +121,7 @@ const testimonials = [
   },
   {
     quote:
-      "The free consultation sold me immediately. No pressure, completely transparent about costs, and Dr. Li clearly loves what he does. Best decision I've made for my health.",
-  },
-];
-
-const doctors = [
-  {
-    image: '/images/doctor-fleer.png',
-    name: 'Dr. Marshall Fleer',
-    credentials: ['Dentistry school', 'Other certifications'],
-    bio: 'Dr. Marshall Fleer loves being an orthodontist. He is a Diplomate of the American Board of Orthodontics and has specialized in orthodontics in central New Jersey for 25 years.',
-  },
-  {
-    image: '/images/doctor-lin.png',
-    name: 'Dr. Christopher Lin',
-    credentials: ['Dentistry school', 'Other certifications'],
-    bio: 'Dr. Christopher Lin combines art and science to create stunning smiles and build strong relationships with his patients and their families from diverse backgrounds and abilities.',
+      "The free consultation sold me immediately. No pressure, completely transparent about costs, and Dr. Lin clearly loves what he does. Best decision I've made for my health.",
   },
 ];
 
@@ -138,50 +141,53 @@ const ageRangeOptions = [
 
 /* ─── Page ─────────────────────────────────────────────────────────── */
 
-export default function HomePage() {
+export default async function HomePage() {
+  const latestPosts = (await getAllPosts()).slice(0, 3);
+
   return (
     <>
-      <JsonLd data={[dentistSchema, websiteSchema]} />
-
       {/* ── Hero ────────────────────────────────────────────────────── */}
       <Section spacing="lg">
         <Container>
           <div className="flex flex-col lg:flex-row items-center gap-12">
-            {/* Left copy */}
             <div className="flex flex-col gap-6 lg:max-w-[586px]">
-              <Text
-                as="p"
-                size="xl"
-                weight="semibold"
-                tone="accent"
-                className="uppercase"
+              <Link
+                href="/new-patients/free-consult"
+                className="self-start hover:opacity-80 transition-opacity"
               >
-                Free consultation available
-              </Text>
+                <Text
+                  as="span"
+                  size="xl"
+                  weight="semibold"
+                  tone="accent"
+                  className="uppercase"
+                >
+                  Free consultation available →
+                </Text>
+              </Link>
               <Heading as="h1" size="xl">
                 Your best smile starts here
               </Heading>
               <div className="flex flex-col gap-4">
                 <Text size="xl" tone="muted" className="leading-normal">
                   At Main St Orthodontics, we combine expert care with the
-                  latest technology to give you a confident, healthy smile — at
-                  every age.
+                  latest technology to give you a confident, healthy smile —
+                  at every age.
                 </Text>
                 <Text size="xl" tone="muted" className="leading-normal">
                   Braces, Invisalign and more, all tailored to you.
                 </Text>
               </div>
               <div className="flex flex-col sm:flex-row gap-4 mt-4">
-                <Button href="/contact" size="lg">
+                <Button href="/new-patients/free-consult" size="lg">
                   Book my free consultation
                 </Button>
-                <Button href="#treatments" size="lg" variant="secondary">
+                <Button href="/treatments" size="lg" variant="secondary">
                   Explore services
                 </Button>
               </div>
             </div>
 
-            {/* Right image */}
             <div className="relative w-full lg:w-[532px] shrink-0">
               <Image
                 src="/images/hero.png"
@@ -223,48 +229,139 @@ export default function HomePage() {
         </Container>
       </Section>
 
-      {/* ── Treatments ─────────────────────────────────────────────── */}
-      <Section spacing="lg" className="scroll-mt-24" as="section">
+      {/* ── Why patients choose us — 4 feature cards ───────────────── */}
+      <Section spacing="lg">
         <Container>
-          <div id="treatments" className="scroll-mt-24" />
+          <header className="flex flex-col items-center text-center gap-4 mb-8 sm:mb-12">
+            <Heading as="h2" size="xl">
+              Why patients choose us
+            </Heading>
+            <Text size="xl" tone="muted" className="max-w-[640px]">
+              Modern care, transparent pricing, and a team that makes every
+              visit feel easy.
+            </Text>
+          </header>
+          <Grid cols={4} gap="md">
+            {featureCards.map((card) => (
+              <article
+                key={card.href}
+                className="border-2 border-border rounded-xl p-6 flex flex-col gap-4 hover:border-accent transition-colors"
+              >
+                <Heading as="h3" size="sm">
+                  {card.title}
+                </Heading>
+                <Text tone="muted">{card.description}</Text>
+                <Link
+                  href={card.href}
+                  className="mt-auto text-accent font-semibold hover:underline"
+                >
+                  {card.cta} →
+                </Link>
+              </article>
+            ))}
+          </Grid>
+        </Container>
+      </Section>
+
+      {/* ── Treatments ─────────────────────────────────────────────── */}
+      <Section spacing="lg" tone="muted">
+        <Container>
           <header className="flex flex-col items-center text-center gap-4 mb-8 sm:mb-16">
             <Heading as="h2" size="xl">
               Treatments tailored to you
             </Heading>
             <Text size="xl" tone="muted" className="max-w-[586px]">
-              Whether you&apos;re 12 or 52, we have a solution that fits your
-              lifestyle and budget.
+              Whether you&apos;re 12 or 52, we have a solution that fits
+              your lifestyle and budget.
             </Text>
           </header>
           <Grid cols={2} gap="lg">
             {treatments.map((t) => (
               <article
-                key={t.title}
-                className="flex flex-col sm:flex-row gap-4 sm:gap-6 border-2 border-border rounded-xl p-4 sm:p-6"
+                key={t.slug}
+                className="flex flex-col sm:flex-row gap-4 sm:gap-6 border-2 border-border bg-surface rounded-xl p-4 sm:p-6 hover:border-accent transition-colors"
               >
-                <Image
-                  src={t.image}
-                  alt={t.title}
-                  width={216}
-                  height={216}
-                  className="rounded-xl object-cover shrink-0 w-full h-48 sm:w-[216px] sm:h-[216px]"
-                />
-                <div className="flex flex-col justify-center gap-2">
-                  <Heading as="h3" size="md">
-                    {t.title}
-                  </Heading>
-                  <Text size="xl" tone="muted">
-                    {t.description}
-                  </Text>
+                <Link
+                  href={`/treatments/${t.slug}`}
+                  className="shrink-0 block"
+                  aria-label={`Learn more about ${t.name}`}
+                >
+                  <Image
+                    src={t.image}
+                    alt={t.name}
+                    width={216}
+                    height={216}
+                    className="rounded-xl object-cover w-full h-48 sm:w-[216px] sm:h-[216px]"
+                  />
+                </Link>
+                <div className="flex flex-col justify-between gap-3">
+                  <div className="flex flex-col gap-2">
+                    <Heading as="h3" size="md">
+                      <Link
+                        href={`/treatments/${t.slug}`}
+                        className="hover:text-accent transition-colors"
+                      >
+                        {t.name}
+                      </Link>
+                    </Heading>
+                    <Text size="xl" tone="muted">
+                      {t.shortDescription}
+                    </Text>
+                  </div>
+                  <Link
+                    href={`/treatments/${t.slug}`}
+                    className="text-accent font-semibold hover:underline self-start"
+                  >
+                    Learn more →
+                  </Link>
                 </div>
               </article>
             ))}
           </Grid>
           <div className="flex justify-center mt-12">
-            <Button href="#" variant="ghost" size="lg">
-              Learn more →
+            <Button href="/treatments" variant="ghost" size="lg">
+              View all treatments →
             </Button>
           </div>
+        </Container>
+      </Section>
+
+      {/* ── 3-step journey ─────────────────────────────────────────── */}
+      <Section spacing="lg">
+        <Container>
+          <header className="flex flex-col items-center text-center gap-4 mb-8 sm:mb-16">
+            <Heading as="h2" size="xl">
+              3 simple steps to your new smile
+            </Heading>
+            <Text size="xl" tone="muted" className="max-w-[586px]">
+              From the first visit to your final reveal — here&apos;s what
+              your journey looks like.
+            </Text>
+          </header>
+          <Grid cols={3} gap="lg">
+            {journeySteps.map((step) => (
+              <article
+                key={step.number}
+                className="border-2 border-border rounded-xl p-6 flex flex-col gap-4 hover:border-accent transition-colors"
+              >
+                <span className="text-accent text-4xl font-bold">
+                  {step.number}
+                </span>
+                <Heading as="h3" size="md">
+                  {step.title}
+                </Heading>
+                <Text size="lg" tone="muted">
+                  {step.description}
+                </Text>
+                <Link
+                  href={step.href}
+                  className="mt-auto text-accent font-semibold hover:underline"
+                >
+                  {step.cta} →
+                </Link>
+              </article>
+            ))}
+          </Grid>
         </Container>
       </Section>
 
@@ -293,8 +390,11 @@ export default function HomePage() {
               </blockquote>
             ))}
           </div>
-          <div className="flex justify-center mt-12">
-            <Button href="#" variant="ghost" size="lg">
+          <div className="flex flex-col sm:flex-row justify-center gap-4 mt-12">
+            <Button href="/reviews" variant="ghost" size="lg">
+              Read all reviews →
+            </Button>
+            <Button href="/before-afters" variant="ghost" size="lg">
               See before &amp; afters →
             </Button>
           </div>
@@ -312,54 +412,91 @@ export default function HomePage() {
           <Grid cols={2} gap="lg">
             {doctors.map((doc) => (
               <article
-                key={doc.name}
-                className="border-2 border-border rounded-xl p-4 sm:p-6 flex flex-col gap-4 sm:gap-6"
+                key={doc.slug}
+                className="border-2 border-border rounded-xl p-4 sm:p-6 flex flex-col gap-4 sm:gap-6 hover:border-accent transition-colors"
               >
                 <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
-                  <Image
-                    src={doc.image}
-                    alt={`Photo of ${doc.name}`}
-                    width={216}
-                    height={216}
-                    className="rounded-xl object-cover shrink-0 w-full h-48 sm:w-[216px] sm:h-[216px]"
-                  />
+                  <Link
+                    href={`/about/doctors/${doc.slug}`}
+                    className="shrink-0 block"
+                    aria-label={`Read full bio for ${doc.name}`}
+                  >
+                    <Image
+                      src={doc.image}
+                      alt={`Photo of ${doc.name}`}
+                      width={216}
+                      height={216}
+                      className="rounded-xl object-cover w-full h-48 sm:w-[216px] sm:h-[216px]"
+                    />
+                  </Link>
                   <div className="flex flex-col gap-2 pt-0 sm:pt-4 items-center sm:items-start">
                     <Heading as="h3" size="md">
-                      {doc.name}
+                      <Link
+                        href={`/about/doctors/${doc.slug}`}
+                        className="hover:text-accent transition-colors"
+                      >
+                        {doc.name}
+                      </Link>
                     </Heading>
-                    {doc.credentials.map((cred) => (
-                      <div key={cred} className="flex items-center gap-2">
-                        <Image
-                          src="/images/icon-certified.png"
-                          alt=""
-                          width={32}
-                          height={32}
-                        />
-                        <Text
-                          size="xl"
-                          weight="semibold"
-                          className="text-accent"
-                        >
-                          {cred}
-                        </Text>
-                      </div>
-                    ))}
+                    <Text size="lg" tone="accent" weight="semibold">
+                      {doc.title}
+                    </Text>
                   </div>
                 </div>
-                <Text size="xl" tone="muted">
+                <Text size="lg" tone="muted">
                   {doc.bio}
                 </Text>
+                <Link
+                  href={`/about/doctors/${doc.slug}`}
+                  className="text-accent font-semibold hover:underline self-start"
+                >
+                  Read full bio →
+                </Link>
               </article>
             ))}
           </Grid>
+          <div className="flex justify-center mt-12">
+            <Button href="/about/doctors" variant="ghost" size="lg">
+              Meet the team →
+            </Button>
+          </div>
         </Container>
       </Section>
+
+      {/* ── Blog teaser ────────────────────────────────────────────── */}
+      {latestPosts.length > 0 && (
+        <Section spacing="lg" tone="muted">
+          <Container>
+            <header className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-12">
+              <div className="flex flex-col gap-2">
+                <Heading as="h2" size="xl">
+                  From the practice
+                </Heading>
+                <Text size="lg" tone="muted">
+                  Treatment guides, parent resources, and notes from our
+                  doctors.
+                </Text>
+              </div>
+              <Link
+                href="/blog"
+                className="text-accent font-semibold hover:underline whitespace-nowrap"
+              >
+                View all posts →
+              </Link>
+            </header>
+            <Grid cols={3} gap="lg">
+              {latestPosts.map((post) => (
+                <BlogCard key={post.slug} {...post} />
+              ))}
+            </Grid>
+          </Container>
+        </Section>
+      )}
 
       {/* ── Contact / CTA ──────────────────────────────────────────── */}
       <Section spacing="lg" tone="accent">
         <Container>
           <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 items-start">
-            {/* Form card */}
             <div className="w-full lg:w-1/2 border-2 border-border-strong rounded-xl p-5 sm:p-10 bg-bg-accent">
               <Heading as="h3" size="md" className="mb-6 sm:mb-8">
                 Request a free consultation
@@ -409,7 +546,6 @@ export default function HomePage() {
               </form>
             </div>
 
-            {/* Right copy */}
             <div className="flex flex-col gap-6 lg:pt-16">
               <Heading as="h2" size="xl">
                 Let&apos;s start your smile journey
@@ -418,6 +554,14 @@ export default function HomePage() {
                 Your first consultation is completely free. Reach out and
                 we&apos;ll find a time that works for your schedule.
               </Text>
+              <div className="flex flex-col sm:flex-row gap-3 mt-2">
+                <Button href="/new-patients" variant="secondary">
+                  New patient info →
+                </Button>
+                <Button href="/contact" variant="ghost">
+                  Other ways to reach us →
+                </Button>
+              </div>
             </div>
           </div>
         </Container>

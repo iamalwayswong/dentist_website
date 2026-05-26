@@ -1,6 +1,11 @@
+export { BeforeAfterCase } from './BeforeAfterCase';
+export { BlogCard } from './BlogCard';
+export { Breadcrumb } from './Breadcrumb';
 export { Button } from './Button';
 export { Card } from './Card';
 export { Container } from './Container';
+export { CTASection } from './CTASection';
+export { FAQ } from './FAQ';
 export { Footer, type FooterSection } from './Footer';
 export { Grid } from './Grid';
 export { Heading } from './Heading';
