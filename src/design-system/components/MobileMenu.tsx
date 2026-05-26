@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import type { NavLink } from './Nav';
 import { cx } from '../utils';
 
@@ -12,7 +13,9 @@ type MobileMenuProps = {
 export function MobileMenu({ links }: MobileMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+  const pathname = usePathname();
 
+  // Lock body scroll while open.
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -24,6 +27,12 @@ export function MobileMenu({ links }: MobileMenuProps) {
     };
   }, [isOpen]);
 
+  // Auto-close on route change.
+  useEffect(() => {
+    setIsOpen(false);
+    setExpanded({});
+  }, [pathname]);
+
   const close = () => {
     setIsOpen(false);
     setExpanded({});
@@ -31,33 +40,37 @@ export function MobileMenu({ links }: MobileMenuProps) {
 
   return (
     <div className="lg:hidden">
+      {/* Hamburger (visible when menu is closed). */}
       <button
         type="button"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => setIsOpen(true)}
         aria-expanded={isOpen}
-        aria-label={isOpen ? 'Close menu' : 'Open menu'}
-        className="relative z-modal flex flex-col justify-center items-center w-10 h-10 gap-1.5"
+        aria-label="Open menu"
+        className={cx(
+          'flex flex-col justify-center items-center w-10 h-10 gap-1.5',
+          isOpen && 'invisible',
+        )}
       >
-        <span
-          className={cx(
-            'block h-0.5 w-6 bg-fg transition-transform duration-base ease-standard',
-            isOpen && 'translate-y-[4px] rotate-45',
-          )}
-        />
-        <span
-          className={cx(
-            'block h-0.5 w-6 bg-fg transition-opacity duration-base ease-standard',
-            isOpen && 'opacity-0',
-          )}
-        />
-        <span
-          className={cx(
-            'block h-0.5 w-6 bg-fg transition-transform duration-base ease-standard',
-            isOpen && '-translate-y-[4px] -rotate-45',
-          )}
-        />
+        <span className="block h-0.5 w-6 bg-fg" />
+        <span className="block h-0.5 w-6 bg-fg" />
+        <span className="block h-0.5 w-6 bg-fg" />
       </button>
 
+      {/* Close button: line-style X, fixed-positioned with safe edge padding
+          so the rotated lines can't be clipped at the viewport edge. */}
+      {isOpen && (
+        <button
+          type="button"
+          onClick={close}
+          aria-label="Close menu"
+          className="fixed top-6 right-4 z-modal w-10 h-10"
+        >
+          <span className="absolute top-1/2 left-1/2 h-0.5 w-6 bg-fg -translate-x-1/2 -translate-y-1/2 rotate-45" />
+          <span className="absolute top-1/2 left-1/2 h-0.5 w-6 bg-fg -translate-x-1/2 -translate-y-1/2 -rotate-45" />
+        </button>
+      )}
+
+      {/* Overlay */}
       <div
         className={cx(
           'fixed inset-0 z-overlay bg-bg-accent overflow-y-auto',

@@ -12,6 +12,7 @@ export { Heading } from './Heading';
 export { Input } from './Input';
 export { MobileMenu } from './MobileMenu';
 export { Nav, type NavLink } from './Nav';
+export { NavDropdown } from './NavDropdown';
 export { Section } from './Section';
 export { Select } from './Select';
 export { Text } from './Text';
